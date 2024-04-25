@@ -1,9 +1,16 @@
 import RPi.GPIO as GPIO
 from gpiozero import AngularServo
 import time
+
+
 TRIG=21
 ECHO=20
 GPIO.setmode(GPIO.BCM)
+
+servo1 = AngularServo(18, min_pulse_width=0.0006, max_pulse_width=0.0023)
+servo2 = AngularServo(2, min_pulse_width=0.0006, max_pulse_width=0.0023)
+
+
 while True:
     print("distance measurement in progress")
     GPIO.setup(TRIG,GPIO.OUT)
@@ -23,4 +30,10 @@ while True:
     distance = (1.02091 * distance) + 1.06547 # y = mx+b
     # distance=round(distance,2)
     print("distance:",distance,"cm")
+
+    if distance < 50:
+        servo1.angle = 90
+    else:
+        servo1.angle = -90
+
     time.sleep(2)    
